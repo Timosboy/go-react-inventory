@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -17,11 +18,6 @@ type Product struct {
 }
 
 var db *sql.DB
-
-var products = []Product{
-	{ID: 1, Name: "Laptop Gamer", Price: 1500.00, Quantity: 10},
-	{ID: 2, Name: "Mouse Vertical", Price: 80.00, Quantity: 50},
-}
 
 func main() {
 
@@ -40,6 +36,10 @@ func main() {
 	}
 
 	router := gin.Default()
+
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:5173"}
+	router.Use(cors.New(config))
 
 	router.GET("/products", func(c *gin.Context) {
 
